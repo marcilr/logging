@@ -37,6 +37,41 @@ Description:
 Log rotate:
   /usr/sbin/logrotate /etc/logrotate.conf
 
+Options
+    -?, --help
+           Prints help message.
+
+    -d, --debug
+           Turns  on  debug mode and implies -v.  In debug mode, no changes
+           will be made to the logs or to the logrotate state file.
+
+    -f, --force
+           Tells logrotate to force the rotation, even if it doesn't  think
+           this  is  necessary.   Sometimes this is useful after adding new
+           entries to a logrotate config file, or if  old  log  files  have
+           been removed by hand, as the new files will be created, and log-
+           ging will continue correctly.
+
+    -m, --mail <command>
+           Tells logrotate which command to use  when  mailing  logs.  This
+           command  should accept two arguments: 1) the subject of the mes-
+           sage, and 2) the recipient. The command must then read a message
+           on standard input and mail it to the recipient. The default mail
+           command is /usr/bin/mail -s.
+
+    -s, --state <statefile>
+           Tells logrotate to use an alternate state file.  This is  useful
+           if  logrotate  is being run as a different user for various sets
+           of log files.  The default state file is /var/lib/logrotate/sta-
+           tus.
+
+    --usage
+           Prints a short usage message.
+
+    -v, --verbose
+           Turns on verbose mode, ie. display messages during rotation.
+
+    --man (Debian Jessie 8.6 amd64, Sep 26, 2016)
 
 
 -- /home/spectracom/log/cron.log.1
