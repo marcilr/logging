@@ -8,4 +8,6 @@ Logging related links
 
 Links
 =====
-
+logrotate - rotates, compresses, and mails system logs
+System Administrator's Manual
+http://www.linuxcommand.org/man_pages/logrotate8.html
