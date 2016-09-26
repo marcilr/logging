@@ -1,0 +1,113 @@
+logrotate.txt
+Created Wed Dec 23 15:17:38 AKST 2015
+Copyright (C) 2015 by Raymond E. Marcil <marcilr@gmail.com>
+
+
+logrotate - rotates, compresses, and mails system logs
+
+Synopsis:
+    logrotate [-dv] [-f|--force] [-s|--state file] config_file+
+
+Description:
+  logrotate  is  designed to ease administration of systems that generate
+  large numbers of log files.  It allows automatic rotation, compression,
+  removal, and mailing of log files.  Each log file may be handled daily,
+  weekly, monthly, or when it grows too large.
+
+  Normally, logrotate is run as a daily cron job.  It will not  modify  a
+  log  multiple  times  in  one  day unless the criterium for that log is
+  based on the log's size and logrotate is being run multiple times  each
+  day, or unless the -f or -force option is used.
+
+  Any number of config files may be given on the command line. Later con-
+  fig files may override the options given in earlier files, so the order
+  in  which  the logrotate config files are listed in is important.  Nor-
+  mally, a single config file which includes any other config files which
+  are  needed  should  be used.  See below for more information on how to
+  use the include directive to accomplish this.  If a directory is  given
+  on  the  command line, every file in that directory is used as a config
+  file.
+
+  If no command line arguments are given, logrotate  will  print  version
+  and  copyright  information,  along with a short usage summary.  If any
+  errors occur while rotating logs, logrotate  will  exit  with  non-zero
+  status.
+  --linuxcommand.org/
+
+Log rotate:
+  /usr/sbin/logrotate /etc/logrotate.conf
+
+
+
+-- /home/spectracom/log/cron.log.1
+   GCI Network Services, OSS Spectracom (192.168.172.100)
+   December 23, 2015
+
+
+rmarcil@Spectracom ~/log $ cat /etc/logrotate.conf
+# see "man logrotate" for details
+include /etc/logrotate.d
+# rotate log files when they exceed 75k
+size=75k
+# keep 4 backlogs worth
+rotate 4
+# don't complain about missing files
+missingok
+# need easy access to old files
+nocompress
+# don't send logs anywhere
+nomail
+
+#will move all rotated logs to /home/spectracom/log
+olddir /home/spectracom/log
+
+# syslog-managed logs
+# this must remain as a single line
+# logrotate barfs if you try to use \ continuations
+/home/spectracom/log/*.log {
+    copytruncate
+    sharedscripts
+    postrotate
+        /usr/bin/killall -HUP syslogd
+    endscript
+}
+
+# apache logs
+/var/log/apache2/*_log /var/log/apache2/*.log {
+    sharedscripts
+    postrotate
+        /usr/sbin/apache2ctl graceful
+    endscript
+}
+
+# var logs
+/var/log/*.log {
+    copytruncate
+}
+
+# mysql logs
+/var/log/mysql/*.log /var/log/mysql/*.err {
+    copytruncate
+}
+
+# IKE/racoon logs 
+/opt/log/racoon.log {
+    copytruncate
+}
+
+# www2 app tmp logs
+/srv/www2/app/tmp/logs/*.log {
+    rotate 0
+}
+rmarcil@Spectracom ~/log $
+
+-- /etc/logrotate.conf
+   GCI Network Services, OSS Spectracom (192.168.172.100)
+   December 23, 2015
+
+
+Links
+=====
+logrotate - rotates, compresses, and mails system logs
+System Administrator's Manual
+http://www.linuxcommand.org/man_pages/logrotate8.html
