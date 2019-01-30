@@ -1,0 +1,8 @@
+#.gitignore
+# Created Wed Jan 30 13:11:46 AKST 2019
+# by Raymond E. Marcil <marcilr@gmail.com>
+#
+# Files for git to ignore.
+#
+.gitignore
+logrotate/
